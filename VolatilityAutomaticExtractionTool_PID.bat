@@ -35,24 +35,26 @@ set PID=
 set /P PID=Numero do processo (PID): %=%
 echo.
 
+mkdir PID_%PID%
+
 call :colorEcho 0E "Gerando MALFIND (trechos de codigo suspeitos)" & echo.
-volatility.exe -f %INPUT% --profile=%INPUTOS% malfind -p %PID% > %INPUT%.malfind
+volatility.exe -f %INPUT% --profile=%INPUTOS% malfind -p %PID% > PID_%PID%/%INPUT%.malfind
 echo.
 
 call :colorEcho 0E "Gerando DLLDUMP (extracao de DLL)" & echo.
-volatility.exe -f %INPUT% --profile=%INPUTOS% dlldump --pid=%PID% -D .\
+volatility.exe -f %INPUT% --profile=%INPUTOS% dlldump --pid=%PID% -D PID_%PID%
 echo.
 
 call :colorEcho 0E "Gerando PROCDUMP (extracao de processo)" & echo.
-volatility.exe -f %INPUT% --profile=%INPUTOS% procdump -p %PID% -D .\
+volatility.exe -f %INPUT% --profile=%INPUTOS% procdump -p %PID% -D PID_%PID%
 echo.
 
 call :colorEcho 0E "Gerando MEMDUMP (extracao de paginas de memoria associadas)" & echo.
-volatility.exe -f %INPUT% --profile=%INPUTOS% memdump -p %PID% -D .\
+volatility.exe -f %INPUT% --profile=%INPUTOS% memdump -p %PID% -D PID_%PID%
 echo.
 
 call :colorEcho 0E "Gerando DUMPFILES (extracao de arquivos associados)" & echo.
-volatility.exe -f %INPUT% --profile=%INPUTOS% dumpfiles -n -p %PID% -D .\
+volatility.exe -f %INPUT% --profile=%INPUTOS% dumpfiles -n -p %PID% -D PID_%PID%
 echo.
 echo.
 echo.

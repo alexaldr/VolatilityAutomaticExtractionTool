@@ -29,66 +29,92 @@ echo.
 
 call :colorEcho 0E "Gerando Hash -sha1 e -md5" & echo.
 fciv.exe -add %INPUT% -both > %INPUT%.hash
+echo fciv.exe -add %INPUT% -both > %INPUT%.hash > comandos.txt
 echo.
 
 call :colorEcho 0E "Gerando IMAGEINFO (perfil do Sistema Operacional)" & echo.
 volatility.exe -f %INPUT% imageinfo > %INPUT%.imageinfo
+echo volatility.exe -f %INPUT% imageinfo >> comandos.txt
 echo.
 
 set INPUTOS=
 set /P INPUTOS=Perfil do sistema operacional: %=%
 echo.
 
+mkdir OUTPUT
 call :colorEcho 0E "Gerando PSLIST (processos em execucao)" & echo.
-volatility.exe -f %INPUT% --profile=%INPUTOS% pslist > %INPUT%.pslist
+volatility.exe -f %INPUT% --profile=%INPUTOS% pslist > OUTPUT/%INPUT%.pslist
+echo volatility.exe -f %INPUT% --profile=%INPUTOS% pslist >> comandos.txt
 echo.
 
 call :colorEcho 0E "Gerando PSTREE (arvore de processos)" & echo.
-volatility.exe -f %INPUT% --profile=%INPUTOS% pstree > %INPUT%.pstree
+volatility.exe -f %INPUT% --profile=%INPUTOS% pstree > OUTPUT/%INPUT%.pstree
+echo volatility.exe -f %INPUT% --profile=%INPUTOS% pstree >> comandos.txt
 echo.
 
 call :colorEcho 0E "Gerando PSSCAN (processos encerrados anteriormente)" & echo.
-volatility.exe -f %INPUT% --profile=%INPUTOS% psscan > %INPUT%.psscan
+volatility.exe -f %INPUT% --profile=%INPUTOS% psscan > OUTPUT/%INPUT%.psscan
+echo volatility.exe -f %INPUT% --profile=%INPUTOS% psscan >> comandos.txt
 echo.
 
 call :colorEcho 0E "Gerando PSXVIEW (processos ocultos)" & echo.
-volatility.exe -f %INPUT% --profile=%INPUTOS% psxview > %INPUT%.psxview
+volatility.exe -f %INPUT% --profile=%INPUTOS% psxview > OUTPUT/%INPUT%.psxview
+echo volatility.exe -f %INPUT% --profile=%INPUTOS% psxview >> comandos.txt
 echo.
 
 call :colorEcho 0E "Gerando CONNECTIONS (conexoes abertas)" & echo.
-volatility.exe -f %INPUT% --profile=%INPUTOS% connections > %INPUT%.connections
+volatility.exe -f %INPUT% --profile=%INPUTOS% connections > OUTPUT/%INPUT%.connections
+echo volatility.exe -f %INPUT% --profile=%INPUTOS% connections >> comandos.txt
 echo.
 
 call :colorEcho 0E "Gerando CONNSCAN (conexoes encerradas)" & echo.
-volatility.exe -f %INPUT% --profile=%INPUTOS% connscan > %INPUT%.connscan
+volatility.exe -f %INPUT% --profile=%INPUTOS% connscan > OUTPUT/%INPUT%.connscan
+echo volatility.exe -f %INPUT% --profile=%INPUTOS% connscan >> comandos.txt
 echo.
 
 call :colorEcho 0E "Gerando DLLLIST (DLLs em execucao)" & echo.
-volatility.exe -f %INPUT% --profile=%INPUTOS% dlllist > %INPUT%.dlllist
+volatility.exe -f %INPUT% --profile=%INPUTOS% dlllist > OUTPUT/%INPUT%.dlllist
+echo volatility.exe -f %INPUT% --profile=%INPUTOS% dlllist >> comandos.txt
+
 echo.
 
 call :colorEcho 0E "Gerando FILESCAN (arquivos abertos anteriormente)" & echo.
-volatility.exe -f %INPUT% --profile=%INPUTOS% filescan > %INPUT%.filescan
+volatility.exe -f %INPUT% --profile=%INPUTOS% filescan > OUTPUT/%INPUT%.filescan
+echo volatility.exe -f %INPUT% --profile=%INPUTOS% filescan >> comandos.txt
 echo.
 
 call :colorEcho 0E "Gerando HANDLES (manipulacoes nos processos)" & echo.
-volatility.exe -f %INPUT% --profile=%INPUTOS% handles > %INPUT%.handles
+volatility.exe -f %INPUT% --profile=%INPUTOS% handles > OUTPUT/%INPUT%.handles
+echo volatility.exe -f %INPUT% --profile=%INPUTOS% handles >> comandos.txt
 echo.
 
 call :colorEcho 0E "Gerando CMDSCAN (historico do CMD)" & echo.
-volatility.exe -f %INPUT% --profile=%INPUTOS% cmdscan > %INPUT%.cmdscan
+volatility.exe -f %INPUT% --profile=%INPUTOS% cmdscan > OUTPUT/%INPUT%.cmdscan
+echo volatility.exe -f %INPUT% --profile=%INPUTOS% cmdscan >> comandos.txt
 echo.
 
 call :colorEcho 0E "Gerando CONSOLES (historico CMD e buffer de exibicao)" & echo.
-volatility.exe -f %INPUT% --profile=%INPUTOS% consoles > %INPUT%.consoles
+volatility.exe -f %INPUT% --profile=%INPUTOS% consoles > OUTPUT/%INPUT%.consoles
+echo volatility.exe -f %INPUT% --profile=%INPUTOS% consoles >> comandos.txt
 echo.
 
 call :colorEcho 0E "Gerando MBRPARSER (informacoes do setor MBR)" & echo.
-volatility.exe -f %INPUT% mbrparser > %INPUT%.mbrparser
+volatility.exe -f %INPUT% mbrparser > OUTPUT/%INPUT%.mbrparser
+echo volatility.exe -f %INPUT% mbrparser >> comandos.txt
 echo.
 
 call :colorEcho 0E "Gerando MFTPARSER (informacoes da MFT)" & echo.
-volatility.exe -f %INPUT% mftparser > %INPUT%.mftparser
+volatility.exe -f %INPUT% mftparser > OUTPUT/%INPUT%.mftparser
+echo volatility.exe -f %INPUT% mftparser >> comandos.txt
+echo.
+
+mkdir LOGS
+call :colorEcho 0E "Gerando LOGs (WinVista+ - evtx logs do sistema)" & echo.
+volatility.exe -f %INPUT% --profile=%INPUTOS% evtxlogs -D LOGS
+
+call :colorEcho 0E "Gerando LOGs (WinXP/2003 - evt logs do sistema)" & echo.
+volatility.exe -f %INPUT% --profile=%INPUTOS% evtlogs -D LOGS
+
 echo.
 echo.
 echo.
